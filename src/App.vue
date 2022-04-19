@@ -12,7 +12,7 @@
           <v-btn
             icon
             class="d-none d-sm-block"
-            @click="$router.push({ name: 'AddPost' })"
+            @click="$router.push({ name: 'AddPost' }).catch(() => {})"
             v-bind="attrs"
             v-on="on"
           >
@@ -26,7 +26,7 @@
           <v-btn
             icon
             class="d-none d-sm-block"
-            @click="$router.push({ name: 'Home' })"
+            @click="$router.push({ name: 'Home' }).catch(() => {})"
             v-bind="attrs"
             v-on="on"
           >
@@ -42,14 +42,16 @@
           v-model="group"
           active-class="deep-purple--text text--accent-4"
         >
-          <v-list-item @click="$router.push({ name: 'Home' })">
+          <v-list-item @click="$router.push({ name: 'Home' }).catch(() => {})">
             <v-list-item-icon>
               <v-icon>mdi-home</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item>
 
-          <v-list-item @click="$router.push({ name: 'AddPost' })">
+          <v-list-item
+            @click="$router.push({ name: 'AddPost' }).catch(() => {})"
+          >
             <v-list-item-icon>
               <v-icon>mdi-plus</v-icon>
             </v-list-item-icon>

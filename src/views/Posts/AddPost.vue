@@ -36,9 +36,7 @@ export default {
       "cacheCurrentPost",
       "getCachedPost",
       "storeCurrentPost",
-      "deleteCurrentPostOldVideos",
-      "storeCurrentPostNewVideos",
-      "setCurrentPostVideosUrls",
+      "manageCurrentPostVideos",
       "setMode",
       "showFlash",
     ]),
@@ -51,9 +49,7 @@ export default {
     },
     async firstStepCompletedHandler() {
       if (this.filesChanged) {
-        await this.deleteCurrentPostOldVideos();
-        await this.storeCurrentPostNewVideos();
-        await this.setCurrentPostVideosUrls();
+        await this.manageCurrentPostVideos();
       }
       await this.cacheCurrentPost();
       this.step = 2;

@@ -80,10 +80,10 @@ export default new Vuex.Store({
     DELETE_CURRENT_POST_VIDEO(state, videoId) {
       delete state.currentPost[state.mode].videos[videoId];
     },
-    ADD_VIDEO_TO_CURRENT_POST(state, { videoId, file }) {
+    ADD_VIDEO_TO_CURRENT_POST(state, { videoId, type, url }) {
       state.currentPost[state.mode].videos = {
         ...state.currentPost[state.mode].videos,
-        [videoId]: new Video(file.type),
+        [videoId]: new Video(type, url),
       };
     },
   },
@@ -96,20 +96,6 @@ export default new Vuex.Store({
     },
     hideFlash({ commit }) {
       commit("HIDE_FLASH");
-    },
-    async setCurrentPostVideosUrls({ commit, state }) {
-      for (const videoId in state.currentPost[state.mode].videos) {
-        if (state.currentPost[state.mode].videos[videoId].url === null) {
-          const url = await firebaseStorage.getDownloadURL(
-            firebaseStorage.ref(storage, `videos/${videoId}`)
-          );
-          commit("UPDATE_CURRENT_POST_VIDEO", {
-            videoId,
-            prop: "Url",
-            value: url,
-          });
-        }
-      }
     },
     async getPosts({ commit }) {
       const dbRef = firebaseDB.ref(db);
@@ -147,26 +133,25 @@ export default new Vuex.Store({
       );
       await firebaseDB.remove(firebaseDB.ref(db, `postsCache`));
     },
-    async deleteCurrentPostOldVideos({ commit, state }) {
-      await Promise.all(
-        Object.keys(state.currentPost[state.mode].videos).map(
-          async (videoId) => {
-            const desertRef = firebaseStorage.ref(storage, `videos/${videoId}`);
-            await firebaseStorage.deleteObject(desertRef);
-            commit("DELETE_CURRENT_POST_VIDEO", videoId);
-          }
-        )
-      );
-    },
-    async storeCurrentPostNewVideos({ commit, state }) {
-      await Promise.all(
-        state.currentPost[state.mode].files.map(async (file) => {
-          const videoId = uuidv4();
-          const storageRef = firebaseStorage.ref(storage, `videos/${videoId}`);
-          await firebaseStorage.uploadBytes(storageRef, file);
-          commit("ADD_VIDEO_TO_CURRENT_POST", { videoId, file });
-        })
-      );
+    async manageCurrentPostVideos({ commit, state }) {
+      const oldVideos = { ...state.currentPost[state.mode].videos };
+      //Store new videos
+      for (const file of state.currentPost[state.mode].files) {
+        const videoId = uuidv4();
+        const storageRef = firebaseStorage.ref(storage, `videos/${videoId}`);
+        await firebaseStorage.uploadBytes(storageRef, file);
+        // Get new videos urls
+        const url = await firebaseStorage.getDownloadURL(
+          firebaseStorage.ref(storage, `videos/${videoId}`)
+        );
+        commit("ADD_VIDEO_TO_CURRENT_POST", { videoId, type: file.type, url });
+      }
+      //Delete old videos
+      for (const videoId in oldVideos) {
+        const desertRef = firebaseStorage.ref(storage, `videos/${videoId}`);
+        await firebaseStorage.deleteObject(desertRef);
+        commit("DELETE_CURRENT_POST_VIDEO", videoId);
+      }
     },
     async setPostToEdit({ commit }, postId) {
       const dbRef = firebaseDB.ref(db);

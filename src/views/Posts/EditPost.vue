@@ -30,9 +30,7 @@ export default {
     ...mapActions([
       "setCurrentPost",
       "storeCurrentPost",
-      "deleteCurrentPostOldVideos",
-      "storeCurrentPostNewVideos",
-      "setCurrentPostVideosUrls",
+      "manageCurrentPostVideos",
       "setPostToEdit",
       "setMode",
       "showFlash",
@@ -46,10 +44,9 @@ export default {
     },
     async firstStepCompletedHandler() {
       if (this.filesChanged) {
-        await this.deleteCurrentPostOldVideos();
-        await this.storeCurrentPostNewVideos();
-        await this.setCurrentPostVideosUrls();
+        await this.manageCurrentPostVideos();
       }
+      await this.storeCurrentPost();
       this.step = 2;
     },
     async secondStepCompletedHandler() {

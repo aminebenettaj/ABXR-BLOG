@@ -10,7 +10,7 @@
           dark
           small
           color="black"
-          @click="$router.push({ name: 'AddPost' })"
+          @click="$router.push({ name: 'AddPost' }).catch(() => {})"
           v-bind="attrs"
           v-on="on"
         >

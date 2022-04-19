@@ -22,7 +22,7 @@ export default class Video {
           const valueToTime = this.stringToTime(value);
           const initialDurationToTime = this.stringToTime(this.initialDuration);
           if (!/^[0-9]{2,}:[0-5][0-9]:[0-5][0-9](\.[0-9]{1,3})?$/.test(value)) {
-            return `The value is not valid, example of correct format: ${this.initialDuration}`;
+            return "The value is not valid, example of correct format: XX:XX:XX.XXX";
           } else if (valueToTime > initialDurationToTime) {
             return `The value is not valid, the initial duration is: ${this.initialDuration}`;
           }
@@ -35,7 +35,7 @@ export default class Video {
           const initialDurationToTime = this.stringToTime(this.initialDuration);
           const endToTime = this.stringToTime(this.end);
           if (!/^[0-9]{2,}:[0-5][0-9]:[0-5][0-9](\.[0-9]{1,3})?$/.test(value)) {
-            return `The value is not valid, example of correct format: ${this.initialDuration}`;
+            return "The value is not valid, example of correct format: XX:XX:XX.XXX";
           } else if (
             valueToTime > initialDurationToTime ||
             valueToTime >= endToTime
@@ -51,7 +51,7 @@ export default class Video {
           const initialDurationToTime = this.stringToTime(this.initialDuration);
           const startToTime = this.stringToTime(this.start);
           if (!/^[0-9]{2,}:[0-5][0-9]:[0-5][0-9](\.[0-9]{1,3})?$/.test(value)) {
-            return `The value is not valid, example of correct format: ${this.initialDuration}`;
+            return "The value is not valid, example of correct format: XX:XX:XX.XXX";
           } else if (
             valueToTime > initialDurationToTime ||
             valueToTime < startToTime

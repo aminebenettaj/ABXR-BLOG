@@ -40,7 +40,7 @@
             rounded
             class="white--text"
           >
-            Next
+            {{ mode === "add" ? "Next" : "Save" }}
           </v-btn>
         </v-col>
       </v-row>
